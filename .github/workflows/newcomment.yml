@@ -8,8 +8,9 @@ jobs:
   comment: 
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/github-script@0.8.0
-        with:
+    - name: Comment on new issue
+      uses: actions/github-script@0.8.0
+      with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             github.issues.createComment({
@@ -17,10 +18,15 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: "🎉 You've created this issue comment using GitHub Script!!!"
-            })
+            });
+    - name: Add issue to project board
+      uses: actions/github-script@0.8.0
+      with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
             github.projects.createCard({
             column_id: {{columnID}},
             content_id: context.payload.issue.id,
             content_Type: "Issue"
-            });
+            });    
           
